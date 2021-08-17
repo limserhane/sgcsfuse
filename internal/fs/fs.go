@@ -36,6 +36,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/limserhane/sgcsfuse/internal/crypto"
+	"github.com/limserhane/goprint"
 )
 
 type ServerConfig struct {
@@ -1020,7 +1021,8 @@ func (fs *fileSystem) LookUpInode(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(LookUpInode)", op.Name, "\033[0m")
+	logger.Debug(goprint.Magenta("(LookUpInode) %s", op.Name))
+	
 
 	// Find or create the child inode.
 	child, err := fs.lookUpOrCreateChildInode(ctx, parent, op.Name)

@@ -25,6 +25,7 @@ import (
 var (
 	defaultLoggerFactory *loggerFactory
 	defaultInfoLogger    *log.Logger
+	defaultDebugLogger   *log.Logger
 )
 
 // InitLogFile initializes the logger factory to create loggers that print to
@@ -45,6 +46,7 @@ func InitLogFile(filename string, format string) error {
 		format: format,
 	}
 	defaultInfoLogger = NewInfo("")
+	defaultDebugLogger = NewDebug("")
 
 	return nil
 }
@@ -56,6 +58,7 @@ func init() {
 		flag: log.Ldate | log.Ltime | log.Lmicroseconds,
 	}
 	defaultInfoLogger = NewInfo("")
+	defaultDebugLogger = NewDebug("")
 }
 
 // Close closes the log file when necessary.
@@ -99,6 +102,16 @@ func Infof(format string, v ...interface{}) {
 // Info calls the default info logger to print the message using Println.
 func Info(v ...interface{}) {
 	defaultInfoLogger.Println(v...)
+}
+
+// Info calls the default info logger to print the message using Printf.
+func Debugf(format string, v ...interface{}) {
+	defaultDebugLogger.Printf(format, v...)
+}
+
+// Info calls the default info logger to print the message using Println.
+func Debug(v ...interface{}) {
+	defaultDebugLogger.Println(v...)
 }
 
 type loggerFactory struct {
