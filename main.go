@@ -42,7 +42,7 @@ import (
 	"github.com/jacobsa/fuse"
 	"github.com/jacobsa/gcloud/gcs"
 	"github.com/jacobsa/syncutil"
-	"github.com/kardianos/osext"
+	// "github.com/kardianos/osext"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/urfave/cli"
 )
@@ -234,14 +234,14 @@ func runCLIApp(c *cli.Context) (err error) {
 
 	// If we haven't been asked to run in foreground mode, we should run a daemon
 	// with the foreground flag set and wait for it to mount.
-	if !flags.Foreground {
+	// if !flags.Foreground {
 		// Find the executable.
-		var path string
-		path, err = osext.Executable()
-		if err != nil {
-			err = fmt.Errorf("osext.Executable: %w", err)
-			return
-		}
+		// var path string
+		// path, err = osext.Executable()
+		// if err != nil {
+		// 	err = fmt.Errorf("osext.Executable: %w", err)
+		// 	return
+		// }
 
 		// Set up arguments. Be sure to use foreground mode, and to send along the
 		// potentially-modified mount point.
@@ -276,14 +276,14 @@ func runCLIApp(c *cli.Context) (err error) {
 		}
 
 		// Run.
-		err = daemonize.Run(path, args, env, os.Stdout)
-		if err != nil {
-			err = fmt.Errorf("daemonize.Run: %w", err)
-			return
-		}
+		// err = daemonize.Run(path, args, env, os.Stdout)
+		// if err != nil {
+		// 	err = fmt.Errorf("daemonize.Run: %w", err)
+		// 	return
+		// }
 
-		return
-	}
+	//	return
+	// }
 
 	// Mount, writing information about our progress to the writer that package
 	// daemonize gives us and telling it about the outcome.
