@@ -1021,9 +1021,8 @@ func (fs *fileSystem) LookUpInode(
 	fs.mu.Unlock()
 
 	// Debug
-	logger.Debug(goprint.Magenta("(LookUpInode) %s", op.Name))
+	logger.Debug(goprint.Yellow("(LookUpInode) name %s", op.Name))
 	
-
 	// Find or create the child inode.
 	child, err := fs.lookUpOrCreateChildInode(ctx, parent, op.Name)
 	if err != nil {
@@ -1054,7 +1053,7 @@ func (fs *fileSystem) GetInodeAttributes(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(GetInodeAttributes)", op.Inode, "\033[0m")
+	logger.Debug(goprint.Yellow("(GetInodeAttributes) inode %d", op.Inode))
 
 	in.Lock()
 	defer in.Unlock()
@@ -1623,7 +1622,7 @@ func (fs *fileSystem) OpenDir(
 	defer fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(OpenDir)", op.Inode, "\033[0m")
+	logger.Debug(goprint.Yellow("(OpenDir) inode %d", op.Inode))
 
 	// Make sure the inode still exists and is a directory. If not, something has
 	// screwed up because the VFS layer shouldn't have let us forget the inode
@@ -1650,7 +1649,7 @@ func (fs *fileSystem) ReadDir(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(ReadDir)", op.Inode, "+", op.Offset, "\033[0m")
+	logger.Debug(goprint.Yellow("(ReadDir) inode %d offset %d", op.Inode, op.Offset))
 
 	dh.Mu.Lock()
 	defer dh.Mu.Unlock()
@@ -1690,7 +1689,7 @@ func (fs *fileSystem) OpenFile(
 	in := fs.fileInodeOrDie(op.Inode)
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(OpenFile)", in.Source().Name, "\033[0m")
+	logger.Debug(goprint.Yellow("(OpenFile) name %s", in.Source().Name))
 
 	// Allocate a handle.
 	handleID := fs.nextHandleID
@@ -1718,7 +1717,7 @@ func (fs *fileSystem) ReadFile(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(ReadFile)", op.Inode, "\033[0m")
+	logger.Debug(goprint.Yellow("(ReadFile) inode %d", op.Inode))
 
 	fh.Lock()
 	defer fh.Unlock()
@@ -1765,7 +1764,7 @@ func (fs *fileSystem) WriteFile(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(WriteFile)", in.Source().Name, "\033[0m")
+	logger.Debug(goprint.Yellow("(WriteFile) name %s", in.Source().Name))
 
 	in.Lock()
 	defer in.Unlock()
@@ -1791,7 +1790,7 @@ func (fs *fileSystem) SyncFile(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(SyncFile)", in.Source().Name, "\033[0m")
+	logger.Debug(goprint.Yellow("(SyncFile) name %s", in.Source().Name))
 
 	in.Lock()
 	defer in.Unlock()
@@ -1814,7 +1813,7 @@ func (fs *fileSystem) FlushFile(
 	fs.mu.Unlock()
 
 	// Debug
-	fmt.Println("\033[31m", "[DEBUG]", "(FlushFile)", in.Source().Name, "\033[0m")
+	logger.Debug(goprint.Yellow("(FlushFile) name %s", in.Source().Name))
 
 	in.Lock()
 	defer in.Unlock()
