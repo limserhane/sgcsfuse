@@ -387,7 +387,7 @@ func populateFlags(c *cli.Context) (flags *flagStorage) {
 		DebugInvariants: c.Bool("debug_invariants"),
 
 		// Custom
-		Password:		c.String("password"),
+		Password:			 c.String("password"),
 	}
 
 	// Handle the repeated "-o" flag.

@@ -106,7 +106,7 @@ type ServerConfig struct {
 	RenameDirLimit int64
 
 	// Custom
-	Password string
+	Key []byte
 }
 
 // Create a fuse file system server according to the supplied configuration.
@@ -142,7 +142,7 @@ func NewFileSystem(
 		generationBackedInodes: make(map[inode.Name]inode.GenerationBackedInode),
 		implicitDirInodes:      make(map[inode.Name]inode.DirInode),
 		handles:                make(map[fuseops.HandleID]interface{}),
-		Password:				cfg.Password,
+		Key:					cfg.Key,
 	}
 
 	// Set up root bucket
@@ -355,7 +355,7 @@ type fileSystem struct {
 	nextHandleID fuseops.HandleID
 
 	// Custom
-	Password string
+	Key []byte
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1731,7 +1731,7 @@ func (fs *fileSystem) ReadFile(
 	}
 
 	// Custom
-	crypto.Decrypt(&op.Dst, &op.BytesRead, fs.Password)
+	crypto.Decrypt(&op.Dst, &op.BytesRead, fs.Key)
 
 	return
 }
@@ -1770,7 +1770,7 @@ func (fs *fileSystem) WriteFile(
 	defer in.Unlock()
 
 	// Custom
-	crypto.Encrypt(&op.Data, fs.Password)
+	crypto.Encrypt(&op.Data, fs.Key)
 
 	// Serve the request.
 	if err := in.Write(ctx, op.Data, op.Offset); err != nil {

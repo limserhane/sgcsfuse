@@ -28,6 +28,8 @@ import (
 	"github.com/jacobsa/fuse"
 	"github.com/jacobsa/fuse/fsutil"
 	"github.com/jacobsa/timeutil"
+
+	"github.com/limserhane/sgcsfuse/internal/crypto"
 )
 
 // Mount the file system based on the supplied arguments, returning a
@@ -110,7 +112,7 @@ be interacting with the file system.`)
 		FilePerms:              os.FileMode(flags.FileMode),
 		DirPerms:               os.FileMode(flags.DirMode),
 		RenameDirLimit:         flags.RenameDirLimit,
-		Password:				flags.Password,
+		Key:					crypto.GetKey(flags.Password),
 	}
 
 	server, err := fs.NewServer(ctx, serverCfg)
