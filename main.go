@@ -64,8 +64,6 @@ func registerSIGINTHandler(mountPoint string) {
 			<-signalChan
 			logger.Info("Received SIGINT, attempting to unmount...")
 
-			blockchain.Close()
-
 			err := fuse.Unmount(mountPoint)
 			if err != nil {
 				logger.Infof("Failed to unmount in response to SIGINT: %v", err)
@@ -236,17 +234,17 @@ func runCLIApp(c *cli.Context) (err error) {
 
 	logger.Infof("Using mount point: %s\n", mountPoint)
 
+/* DAEMONIZE
 	// If we haven't been asked to run in foreground mode, we should run a daemon
 	// with the foreground flag set and wait for it to mount.
-	// if !flags.Foreground {
-		// Find the executable.
-		// var path string
-		// path, err = osext.Executable()
-		// if err != nil {
-		// 	err = fmt.Errorf("osext.Executable: %w", err)
-		// 	return
-		// }
-
+	if !flags.Foreground {
+		var path string 
+		path, err = osext.Executable() // Find the executable.
+		if err != nil {
+			err = fmt.Errorf("osext.Executable: %w", err)
+			return
+		}
+*/
 		// Set up arguments. Be sure to use foreground mode, and to send along the
 		// potentially-modified mount point.
 		args := append([]string{"--foreground"}, os.Args[1:]...)
@@ -279,16 +277,17 @@ func runCLIApp(c *cli.Context) (err error) {
 				p)
 		}
 
+/* DAEMONIZE
 		// Run.
-		// err = daemonize.Run(path, args, env, os.Stdout)
-		// if err != nil {
-		// 	err = fmt.Errorf("daemonize.Run: %w", err)
-		// 	return
-		// }
+		err = daemonize.Run(path, args, env, os.Stdout)
+		if err != nil {
+			err = fmt.Errorf("daemonize.Run: %w", err)
+			return
+		}
 
-	//	return
-	// }
-
+		return
+	}
+*/
 	// Mount, writing information about our progress to the writer that package
 	// daemonize gives us and telling it about the outcome.
 	var mfs *fuse.MountedFileSystem
@@ -320,6 +319,8 @@ func runCLIApp(c *cli.Context) (err error) {
 		err = fmt.Errorf("MountedFileSystem.Join: %w", err)
 		return
 	}
+
+	blockchain.Close()
 
 	return
 }
