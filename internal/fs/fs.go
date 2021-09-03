@@ -36,6 +36,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/limserhane/sgcsfuse/internal/crypto"
+	"github.com/limserhane/sgcsfuse/internal/blockchain"
 	"github.com/limserhane/goprint"
 )
 
@@ -1771,6 +1772,8 @@ func (fs *fileSystem) WriteFile(
 
 	// Custom
 	crypto.Encrypt(&op.Data, fs.Key)
+
+	blockchain.Add(in.Source().Name, op.Data)
 
 	// Serve the request.
 	if err := in.Write(ctx, op.Data, op.Offset); err != nil {

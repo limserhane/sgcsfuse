@@ -45,6 +45,8 @@ import (
 	// "github.com/kardianos/osext"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/urfave/cli"
+
+	"github.com/limserhane/sgcsfuse/internal/blockchain"
 )
 
 ////////////////////////////////////////////////////////////////////////
@@ -61,6 +63,8 @@ func registerSIGINTHandler(mountPoint string) {
 		for {
 			<-signalChan
 			logger.Info("Received SIGINT, attempting to unmount...")
+
+			blockchain.Close()
 
 			err := fuse.Unmount(mountPoint)
 			if err != nil {

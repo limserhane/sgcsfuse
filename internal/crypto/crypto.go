@@ -74,3 +74,9 @@ func Decrypt(data *[]byte, n *int, key []byte) { // MUST DECRYPT IN PLACE
 
 	return
 }
+
+func Hash(data []byte) (hash []byte) {
+	hash32 := sha256.Sum256(data)
+	hash = hash32[:]
+	return
+}
